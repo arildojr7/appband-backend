@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  appband-api:
+    build: .
+    container_name: appband-api
+    image: appband-api:latest
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    volumes:
+      - /opt/appband/logs:/app/logs
+    environment:
+      SPRING_PROFILE: ${SPRING_PROFILE:-homolog}
+      SPRING_DATA_MONGODB_URI: ${SPRING_DATA_MONGODB_URI}

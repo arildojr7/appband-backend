@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://arildojr:655664Aj@appband-ujvuc.mongodb.net/test?retryWrites=true&w=majority
+
+app:
+  env:
+    is-homolog: true
+  security:
+    user:
+      client-id: "FSaEmNEcgciVVLcED3KNjmPEGD8QYnRW"
+      client-secret: "HBkflC3OEQEB1nHBT5SDOHdn5KLCu5Pj"
