@@ -6,11 +6,13 @@ import dev.arildo.appband.song.repository.SongRepository
 import dev.arildo.appband.song.service.dto.AddSongRequestDTO
 import dev.arildo.appband.song.service.dto.SongResponseDTO
 import org.bson.types.ObjectId
+import org.modelmapper.ModelMapper
 import org.springframework.stereotype.Service
 
 @Service
 class SongService(private val songRepository: SongRepository,
-                  private val singerService: SingerService) {
+                  private val singerService: SingerService,
+                  private val modelMapper: ModelMapper) {
 
     fun getSongs(): List<SongResponseDTO> {
         val resultList = mutableListOf<SongResponseDTO>()
@@ -53,6 +55,20 @@ class SongService(private val songRepository: SongRepository,
                 HTML_PREFIX + savedSong.chord + HTML_POSTFIX
         )
     }
+
+    fun getSongByIds(songIds : List<String>) : List<SongResponseDTO> {
+        return songRepository.findAllById(songIds).mapNotNull {
+            it.toDTO()
+        }
+    }
+
+    // region EXTENSIONS
+    private fun Song.toDTO() : SongResponseDTO? {
+        return modelMapper.map(this, SongResponseDTO::class.java)?.apply<SongResponseDTO?> {
+            this?.singer = singerService.getSingerById(singerId.toString())?.name
+        }
+    }
+    // endregion
 
     companion object {
         const val HTML_PREFIX = """<html><head>
