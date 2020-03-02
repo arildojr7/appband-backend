@@ -1,20 +1,36 @@
 package dev.arildo.appband.song.service
 
+import dev.arildo.appband.singer.service.SingerService
 import dev.arildo.appband.song.model.Song
 import dev.arildo.appband.song.repository.SongRepository
 import dev.arildo.appband.song.service.dto.AddSongRequestDTO
 import dev.arildo.appband.song.service.dto.SongResponseDTO
 import org.bson.types.ObjectId
-import org.modelmapper.ModelMapper
-import org.modelmapper.TypeToken
 import org.springframework.stereotype.Service
 
 @Service
 class SongService(private val songRepository: SongRepository,
-                  private val modelMapper: ModelMapper) {
+                  private val singerService: SingerService) {
+
     fun getSongs(): List<SongResponseDTO> {
-        val listType = object : TypeToken<List<SongResponseDTO>>() {}.type
-        return modelMapper.map(songRepository.findAll(), listType)
+        val resultList = mutableListOf<SongResponseDTO>()
+
+        songRepository.findAll().forEach { song ->
+            val singerName = singerService.getSingerById(song.singerId.toString())?.name
+
+            resultList.add(
+                    SongResponseDTO(
+                            song.id,
+                            song.title,
+                            singerName,
+                            song.tone,
+                            song.capo,
+                            song.thumb,
+                            HTML_PREFIX + song.chord + HTML_POSTFIX
+                    )
+            )
+        }
+        return resultList
     }
 
     fun addSong(request: AddSongRequestDTO): SongResponseDTO {
@@ -27,6 +43,37 @@ class SongService(private val songRepository: SongRepository,
                 chord = request.chord
         ))
 
-        return SongResponseDTO(savedSong.id, savedSong.title, savedSong.singerId.toString(), savedSong.tone, savedSong.capo, savedSong.thumb, savedSong.chord)
+        return SongResponseDTO(
+                savedSong.id,
+                savedSong.title,
+                savedSong.singerId.toString(),
+                savedSong.tone,
+                savedSong.capo,
+                savedSong.thumb,
+                HTML_PREFIX + savedSong.chord + HTML_POSTFIX
+        )
+    }
+
+    companion object {
+        const val HTML_PREFIX = """<html><head>
+<style type='text/css'>
+b {
+color: #f09227; 
+font-weight: bold;
+}
+pre {
+white-space: pre-wrap; 
+word-break: break-word;
+}
+body {
+margin:0;
+padding:0;
+color: #000000; 
+font: 14px arial, sans-serif;
+}
+</style>
+</head>
+<body>"""
+        const val HTML_POSTFIX = """</body>"""
     }
 }

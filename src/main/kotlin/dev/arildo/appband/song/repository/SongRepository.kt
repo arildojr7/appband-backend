@@ -5,5 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface SongRepository : MongoRepository<Song, String> {
+interface SongRepository : MongoRepository<Song, String> , SongCustomRepository{
 }

@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
-@RestController("song")
+@RestController
 class SongController(private val songService: SongService) {
 
-    @GetMapping
+    @GetMapping("song")
     fun getSongs() : ResponseEntity<List<SongResponseDTO>> {
         return ResponseEntity.ok(songService.getSongs())
     }
 
-    @PostMapping
+    @PostMapping("song")
     fun addSong(@RequestBody request: AddSongRequestDTO) : ResponseEntity<SongResponseDTO> {
         return ResponseEntity.ok(songService.addSong(request))
     }
