@@ -10,7 +10,7 @@
     </parent>
     <groupId>dev.arildo</groupId>
     <artifactId>appband</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>appband</name>
     <description>AppBand API</description>
 
