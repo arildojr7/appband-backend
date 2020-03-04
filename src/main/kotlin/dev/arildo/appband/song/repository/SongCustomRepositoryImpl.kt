@@ -13,7 +13,7 @@ class SongCustomRepositoryImpl(private val mongoTemplate: MongoTemplate,
         val pipeline = listOf(
                 Document()
                         .append("\$lookup", Document()
-                                .append("from", "singer")
+                                .append("from", "musician")
                                 .append("localField", "singerId")
                                 .append("foreignField", "_id")
                                 .append("as", "singer")

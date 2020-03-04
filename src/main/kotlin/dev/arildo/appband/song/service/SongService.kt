@@ -1,6 +1,6 @@
 package dev.arildo.appband.song.service
 
-import dev.arildo.appband.singer.service.SingerService
+import dev.arildo.appband.musician.service.MusicianService
 import dev.arildo.appband.song.model.Song
 import dev.arildo.appband.song.repository.SongRepository
 import dev.arildo.appband.song.service.dto.AddSongRequestDTO
@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class SongService(private val songRepository: SongRepository,
-                  private val singerService: SingerService,
+                  private val musicianService: MusicianService,
                   private val modelMapper: ModelMapper) {
 
     fun getSongs(): List<SongResponseDTO> {
         val resultList = mutableListOf<SongResponseDTO>()
 
         songRepository.findAll().forEach { song ->
-            val singerName = singerService.getSingerById(song.singerId.toString())?.name
+            val singerName = musicianService.getMusicianById(song.singerId.toString())?.name
 
             resultList.add(
                     SongResponseDTO(
@@ -65,7 +65,7 @@ class SongService(private val songRepository: SongRepository,
     // region EXTENSIONS
     private fun Song.toDTO() : SongResponseDTO? {
         return modelMapper.map(this, SongResponseDTO::class.java)?.apply<SongResponseDTO?> {
-            this?.singer = singerService.getSingerById(singerId.toString())?.name
+            this?.singer = musicianService.getMusicianById(singerId.toString())?.name
         }
     }
     // endregion

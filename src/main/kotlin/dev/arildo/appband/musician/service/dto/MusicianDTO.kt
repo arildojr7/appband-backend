@@ -1,6 +1,6 @@
-package dev.arildo.appband.singer.service.dto
+package dev.arildo.appband.musician.service.dto
 
-class SingerDTO(
+class MusicianDTO(
         var id: String? = null,
         var name: String? = null
 )
