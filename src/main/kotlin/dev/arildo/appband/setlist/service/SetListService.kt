@@ -24,14 +24,15 @@ class SetListService (private val setListRepository: SetListRepository,
     }
 
     fun getSetLists(): List<SetListDTO> {
-        return setListRepository.findAll().map { it.toDTO() }
+        return setListRepository.findAll().mapIndexed { index, setList -> setList.toDTO(index) }
     }
 
     // region EXTENSIONS
 
-    private fun SetList.toDTO() : SetListDTO {
+    private fun SetList.toDTO(number: Int? = null) : SetListDTO {
         return SetListDTO(
                 this.id,
+                number,
                 this.date?.time,
                 this.songIds.run {
                     songService.getSongByIds(this.map { it.toString() })
