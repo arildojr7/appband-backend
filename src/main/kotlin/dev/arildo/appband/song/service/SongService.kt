@@ -28,7 +28,7 @@ class SongService(private val songRepository: SongRepository,
                             song.tone,
                             song.capo,
                             song.thumb,
-                            HTML_PREFIX + song.chord + HTML_POSTFIX
+                            song.chord
                     )
             )
         }
@@ -52,44 +52,22 @@ class SongService(private val songRepository: SongRepository,
                 savedSong.tone,
                 savedSong.capo,
                 savedSong.thumb,
-                HTML_PREFIX + savedSong.chord + HTML_POSTFIX
+                savedSong.chord
         )
     }
 
-    fun getSongByIds(songIds : List<String>) : List<SongResponseDTO> {
+    fun getSongByIds(songIds: List<String>): List<SongResponseDTO> {
         return songRepository.findAllById(songIds).mapNotNull {
             it.toDTO()
         }
     }
 
     // region EXTENSIONS
-    private fun Song.toDTO() : SongResponseDTO? {
+    private fun Song.toDTO(): SongResponseDTO? {
         return modelMapper.map(this, SongResponseDTO::class.java)?.apply<SongResponseDTO?> {
             this?.singer = musicianService.getMusicianById(singerId.toString())?.name
         }
     }
     // endregion
 
-    companion object {
-        const val HTML_PREFIX = """<html><head>
-<style type='text/css'>
-b {
-color: #f09227; 
-font-weight: bold;
-}
-pre {
-white-space: pre-wrap; 
-word-break: break-word;
-}
-body {
-margin:0;
-padding:0;
-color: #000000; 
-font: 14px arial, sans-serif;
-}
-</style>
-</head>
-<body>"""
-        const val HTML_POSTFIX = """</body>"""
-    }
 }

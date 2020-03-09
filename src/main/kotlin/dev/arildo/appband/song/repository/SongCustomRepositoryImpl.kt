@@ -24,7 +24,7 @@ class SongCustomRepositoryImpl(private val mongoTemplate: MongoTemplate,
 
         collection.aggregate(pipeline).allowDiskUse(true).forEach {
             objectMapper.readValue(it.toJson(), SongResponseDTO::class.java).apply {
-                resultList.add(copy(chord = HTML_PREFIX + chord + HTML_POSTFIX))
+                resultList.add(copy(chord = chord))
             }
         }
         return resultList
@@ -33,7 +33,5 @@ class SongCustomRepositoryImpl(private val mongoTemplate: MongoTemplate,
     companion object {
 
         const val SONG_COLLECTION = "song"
-        const val HTML_PREFIX = """<html><head><style type='text/css'>b { color: #f09227; font-weight: bold; } pre { white-space: pre-wrap; word-break: break-word; } body { margin:0; padding:0; color: #000000; font: 14px arial, sans-serif; } </style> </head> <body>"""
-        const val HTML_POSTFIX = """</body>"""
     }
 }

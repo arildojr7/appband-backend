@@ -8,5 +8,6 @@ class SetList(
         @Id
         var id: String? = null,
         var date: Date? = null,
+        var musicianIds: List<ObjectId> = emptyList(),
         var songIds: List<ObjectId> = emptyList()
 )

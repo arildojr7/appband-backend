@@ -22,9 +22,21 @@ class MusicianService(private val musicianRepository: MusicianRepository,
         return musicianRepository.findByIdOrNull(musicianId)
     }
 
+    fun getMusicianByIds(musicianIds: List<String>): List<MusicianDTO> {
+        return musicianRepository.findAllById(musicianIds).mapNotNull {
+            it.toDTO()
+        }
+    }
+
     fun addMusician(request: AddMusicianRequestDTO): MusicianDTO {
         val savedMusician = musicianRepository.save(modelMapper.map(request, Musician::class.java))
         return modelMapper.map(savedMusician, MusicianDTO::class.java)
     }
+
+    // region EXTENSIONS
+    private fun Musician.toDTO(): MusicianDTO {
+        return modelMapper.map(this, MusicianDTO::class.java)
+    }
+    // endregion
 
 }
